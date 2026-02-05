@@ -16,8 +16,24 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // para guardar un usario en un bash
 
     public User registerUser (User user){
-
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // aca se manda encriptado
+        // validar si el email ya existe
+        if (userRepository.findByEmail(user.getEmail()).isPresent()){
+            throw new IllegalArgumentException("El correo ya esta en uso");
+        }
+        // validar contraseña 
+        String password= user.getPassword();
+        String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z0-9]).{8,}$";
+        if (!password.matches(passwordPattern)){
+            throw new IllegalArgumentException("La contraseña no cumple con los requisitos de seguridad");
+        }
+        
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // aca se manda encriptada la contrasena
         return userRepository.save(user);
     }
+
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+
 }
