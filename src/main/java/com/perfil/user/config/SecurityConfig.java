@@ -13,9 +13,14 @@ public class SecurityConfig {
         http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/v1/user/login", "/api/v1/user/registrar").permitAll()
+            .requestMatchers("/api/v1/user/login", "/api/v1/user/registrar", "/api/v1/user/eliminar/**").permitAll()
             .anyRequest().authenticated()
         );
         return http.build();
     }
 }
+// Configuración de seguridad para la aplicación utilizando Spring Security.
+// La anotación @Configuration indica que esta clase contiene configuraciones de Spring.
+// El método filterChain define la cadena de filtros de seguridad para las solicitudes HTTP.
+// Se desactiva la protección CSRF para simplificar las pruebas (no recomendado para producción).
+// Se permite el acceso sin autenticación a las rutas de login y registro, mientras que todas las demás rutas requieren autenticación.

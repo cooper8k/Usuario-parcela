@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.perfil.user.dto.UserReponseDto;
+import com.perfil.user.exception.UserNotFoundException;
 import com.perfil.user.model.User;
 import com.perfil.user.repository.UserRepository;
 
@@ -35,5 +37,11 @@ public class UserService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
+    public UserReponseDto eliminarUsuario(Long id) {
+    User user = userRepository.findById(id)
+        .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+    userRepository.delete(user);
+    return new UserReponseDto(user.getId(), user.getEmail(), "Usuario eliminado correctamente");
+}
 
 }

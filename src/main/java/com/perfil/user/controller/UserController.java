@@ -2,6 +2,8 @@ package com.perfil.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.perfil.user.config.JwtUtil;
 import com.perfil.user.dto.JwtResponse;
 import com.perfil.user.dto.LoginRequest;
+import com.perfil.user.dto.UserReponseDto;
+import com.perfil.user.exception.UserNotFoundException;
 import com.perfil.user.model.User;
 import com.perfil.user.service.UserService;
 
@@ -47,4 +51,15 @@ public class UserController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
+@DeleteMapping("/eliminar/{id}")
+public ResponseEntity<?> eliminarUsuario (@PathVariable Long id){
+    try {
+        UserReponseDto respuesta = userService.eliminarUsuario(id);
+        return ResponseEntity.ok(respuesta);
+    }catch(UserNotFoundException e){
+        return ResponseEntity.status(404).body(e.getMessage());
+    } catch (Exception e){
+        return ResponseEntity.status(500).body("Error al eliminar usuario");
+    }
+}
 }

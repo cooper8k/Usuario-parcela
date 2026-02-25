@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class UserReponseDto {
+    @NotNull(message = "Id es requerido")
+    private Long id;
     @NotNull(message = "Email es requerido")
     private String email;
-    @NotNull(message = "Password es requerido")
-    private String password;
+    @NotNull(message = "Mensaje es requerido")
+    private String mensaje;
 }
